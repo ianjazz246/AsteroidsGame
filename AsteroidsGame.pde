@@ -4,6 +4,7 @@
 Spaceship spaceship;
 ArrayList<Star> starList;
 ArrayList<Asteroid> asteroidList;
+ArrayList<Bullet> bulletList;
 boolean accelerating;
 boolean rightDown;
 boolean leftDown;
@@ -38,6 +39,9 @@ public void setup()
   accelerating = false;
   rightDown = false;
   leftDown = false;
+  
+  bulletList = new ArrayList<Bullet>();
+  bulletList.add(new Bullet(color(125), 300, 300, 2, 2, 90));
 
   //console.log(javascript);
 
@@ -71,7 +75,12 @@ public void draw()
   {
     i.show();
   }
-
+  
+  for (Bullet i : bulletList)
+  {
+    i.move();
+    i.show();
+  }
   for (int i = 0; i < asteroidList.size(); ++i)
   {
     Asteroid asteroid = asteroidList.get(i);
@@ -268,6 +277,9 @@ public void keyPressed()
   case 'f':
   case 'F':
     spaceship.hyperspace();
+    break;
+  case ' ':
+    
     break;
   }
 }
