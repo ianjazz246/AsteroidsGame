@@ -23,14 +23,12 @@ class Bullet extends Floater {
   }
 
   public void move() {
-    myCenterX += myDirectionX;    
-    myCenterY += myDirectionY;     
-
-    //set death if outside of bounds
-    if (myCenterX > width || myCenterX < 0 || myCenterY > height || myCenterY < 0) 
-    {     
+    super.move();
+    if (this.myCenterX < 0 || this.myCenterX > width || this.myCenterY < 0 || this.myCenterY > height) {
       this.dead = true;
+      return;
     }
+    this.dead = false;
   }
 
   public boolean isDead() {
