@@ -15,6 +15,10 @@ boolean hyperspace;
 //firing button is down
 boolean fireDown;
 
+boolean gameOver;
+
+PImage heartImg;
+
 
 //temporary
 int[] asteroidVertexesX = /*{5, 5, -5, -5};*/{15, 8, 0, -7, -14, -8, -6, 0, 8};
@@ -45,9 +49,15 @@ public void setup()
 	rightDown = false;
 	leftDown = false;
 	fireDown = false;
+
+	gameOver = false;
 	
 	bulletList = new ArrayList<Bullet>();
 	bulletList.add(new Bullet(color(125), 300, 300, 2, 2, 90));
+
+	//heart image from https://www.needpix.com/photo/1138710/pixel-heart-heart-pixel-symbol-red-valentine-romantic-shape-pixelated
+	heartImg = loadImage("pixel-heart.png");
+
 
 	//console.log(javascript);
 
@@ -77,10 +87,10 @@ public void draw()
 	spaceship.show(accelerating);
 	spaceship.move();
 	if (fireDown) {
-	Bullet newBullet = spaceship.fireBullet();
-	if (newBullet != null) {
-		bulletList.add(newBullet);
-	}
+		Bullet newBullet = spaceship.fireBullet();
+		if (newBullet != null) {
+			bulletList.add(newBullet);
+		}
 	}
 	
 
@@ -100,6 +110,8 @@ public void draw()
 	bullet.show();
 	}
 
+	//check collisions
+	//Todo: Grid to reduce amount of checking
 	for (int i = asteroidList.size()-1; i >= 0; i--)
 	{
 		boolean collision = false;
@@ -157,11 +169,12 @@ public void draw()
 				}
 				
 				if (collision) {
-					//System.out.println("Collision");
-				 /* System.out.println(spaceship.getX());
-					System.out.println(spaceship.getY());
-					System.out.println(asteroid.getPointDirection());*/
-					asteroidList.remove(i);
+					//handle collision
+
+					if (spaceship.reduceLives() < 1) {
+						gameOver();
+					}
+
 				}
 				else {
 					//System.out.println("No Collision");
@@ -249,28 +262,60 @@ public void draw()
 			}
 		}
 		if (!collision) {
-
+			for (int j = bulletList.size()-1; j > -1; j--) {
+				Bullet bullet = bulletList.get(j);
+				if (dist((float)bullet.getX(), (float)bullet.getY(), (float)asteroid.getX(), (float)asteroid.getY()) < 20) {
+					for (int k = 0; k < asteroidVertexesX.length-1; k++) {
+						//if distance between asteroid side endpoints less than vertex, collision
+						//Technically would miss collisions, but because of small asteroid size and its rotation, it gets most of them
+						if (dist((float)(asteroidVertexesX[k]+asteroid.getX()), (float)(asteroidVertexesY[k]+asteroid.getY()), (float)bullet.getX(), (float)bullet.getY()) < 3 ||
+							dist((float)(asteroidVertexesX[k+1]+asteroid.getX()), (float)(asteroidVertexesY[k+1]+asteroid.getY()), (float)bullet.getX(), (float)bullet.getY()) < 3) {
+							collision = true;
+							bulletList.remove(j);						
+							break;
+						} 
+					}
+				}
+			}
 		}
-
-		asteroid.move();
-		asteroid.show();
+		if (collision) {
+			asteroidList.remove(i);
+			if (asteroidList.size() < 1) {
+				gameOver();
+			}
+		}
+		else {
+			asteroid.move();
+			asteroid.show();
+		}
 	}
 
 	if (!spaceship.inHyperspace())
 	{
-	if (accelerating)
-	{
-		spaceship.accelerate(0.1);
+		if (accelerating)
+		{
+			spaceship.accelerate(0.1);
+		}
+
+		if (leftDown && rightDown == false)
+		{
+			spaceship.turn(-4);
+		}
+		else if (rightDown && leftDown == false)
+		{
+			spaceship.turn(4);
+		}
 	}
 
-	if (leftDown && rightDown == false)
-	{
-		spaceship.turn(-4);
-	} else if (rightDown && leftDown == false)
-	{
-		spaceship.turn(4);
-	}
-	}
+	//---------------
+	//Draw UI
+	//--------------
+	//Lives indicator
+	fill(255);
+	textSize(12);
+	textAlign(CENTER, CENTER);
+	image(heartImg, width - 40, 5, 20, 20);
+	text(spaceship.getLives(), width - 15,13);
 }
 
 public void keyPressed()
@@ -328,6 +373,24 @@ public void keyReleased()
 	break;
 	}
 }
+
+public void gameOver() {
+	fill(255);
+	textSize(40);
+	textAlign(CENTER, CENTER);
+	noLoop();
+	if (asteroidList.size() > 0) {		
+		text("Game Over",width/2, height/2);
+	}
+	else {
+		text("You win!",width/2, height/2);
+	}
+}
+
+
+//--------
+//util functions and classes
+//--------
 
 class Point {
 	private double x;

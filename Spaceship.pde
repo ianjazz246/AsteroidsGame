@@ -1,6 +1,7 @@
 class Spaceship extends Floater  
 {   
-  private int hyperspaceTime, lastFireTime;
+  private int hyperspaceTime, lastFireTime, lives;
+
 
   public Spaceship(
     int corners, 
@@ -24,6 +25,7 @@ class Spaceship extends Floater
 
 
     this.hyperspaceTime = 0;
+    this.lives = 3;
   }
 
   public void accelerate(double dAmount)
@@ -110,8 +112,8 @@ class Spaceship extends Floater
 
   public Bullet fireBullet()
   {
-  	//fire every 200 milliseconds
-  	if (millis() - this.lastFireTime > 200) {
+  	//fire every 500 milliseconds
+  	if (millis() - this.lastFireTime > 500) {
   		this.lastFireTime = millis();
   		double angleRad = Math.PI / 180 * this.myPointDirection;
 	  	return new Bullet(
@@ -149,6 +151,13 @@ class Spaceship extends Floater
   public void setY(double y)
   {
     this.myCenterY = y;
+  }
+
+  public int reduceLives() {
+  	return --this.lives;
+  }
+  public int getLives() {
+  	return this.lives;
   }
   
 
