@@ -58,6 +58,8 @@ public void setup()
 	explosionList = new ArrayList<Explosion>();
 	// explosionList.add(new Explosion(200, 200, 5, 5, 3, 1000));
 	// explosionList.get(0).startExplode();
+
+  generateRandomConvex(10, 3);
 	
 
 	//heart image from https://www.needpix.com/photo/1138710/pixel-heart-heart-pixel-symbol-red-valentine-romantic-shape-pixelated
@@ -132,9 +134,9 @@ public void draw()
 					
 					shiftRotatePoints(shipVertexesX, shipVertexesY, spaceship.getX(), spaceship.getY(), spaceship.getPointDirection(), shiftedShipVertexesX,  shiftedShipVertexesY);
 					
-					Point[] shipNormals = new Point[shipVertexesX.length]; //<>//
+					Point[] shipNormals = new Point[shipVertexesX.length];
 					
-					//Calculate normal of each side in the shipvertex //<>//
+					//Calculate normal of each side in the shipvertex
 					for (int j = 0; j < shipVertexesX.length - 1; j++) {
 						shipNormals[j] = calcNormal(shiftedShipVertexesX[j+1],shiftedShipVertexesY[j+1],shiftedShipVertexesX[j],shiftedShipVertexesY[j]); 
 					}
@@ -469,9 +471,9 @@ public double[][] shiftRotatePoints(int[] vertexesX, int[] vertexesY, double x, 
 		double translatedX = vertexesX[i] + x;
 		double translatedY = vertexesY[i] + y;
 		
-		outputArrayX[i] = (translatedX-x)*Math.cos(angle) + x - (translatedY-y)*Math.sin(angle); //<>//
+		outputArrayX[i] = (translatedX-x)*Math.cos(angle) + x - (translatedY-y)*Math.sin(angle);
 		outputArrayY[i] = (translatedX-x)*Math.sin(angle) + (translatedY-y)*Math.cos(angle) + y;
-	} //<>//
+	}
 	return new double[][]{outputArrayX,outputArrayY};
 }
 
@@ -499,5 +501,4 @@ public int[][] generateRandomConvex(int numVertexes, int size) {
 	for(int i = 0; i < numRandomPoints; i++) {
 		randomPoints[i] = new Point(Math.random() * size/2, Math.random() * size/2);
 	}
-	return new int[][]{};
 }

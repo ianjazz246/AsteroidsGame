@@ -21,18 +21,18 @@ public class Explosion extends Floater
     public void show()
     {
         int currTime = millis();
-        if (currTime - this.explodeStartTime > this.explodeDuration)
+        if (currTime - this.explodeStartTime < this.explodeDuration)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 9; i++)
             {
-                int innerRadius = 1;
-                int outerRadius = currTime / 100;
-                int angle = 360 / i;
+                int innerRadius = 5;
+                int outerRadius = 10 * (currTime - this.explodeStartTime) / this.explodeDuration;
+                double angle = 2*Math.PI * i/8;
                 line(
-                    (float)(innerRadius * Math.cos(angle) - innerRadius * Math.sin(angle) + this.myCenterX),
-                    (float)(innerRadius * Math.sin(angle) + innerRadius * Math.cos(angle) + this.myCenterY),
-                    (float)((innerRadius + 5) * Math.cos(angle) - innerRadius * Math.sin(angle) + this.myCenterX),
-                    (float)((innerRadius + 5) * Math.sin(angle) + innerRadius * Math.cos(angle) + this.myCenterY)
+                    (float)(innerRadius * Math.cos(angle) - 0*Math.sin(angle) + this.myCenterX),
+                    (float)(innerRadius * Math.sin(angle) + 0*Math.cos(angle) + this.myCenterY),
+                    (float)((innerRadius + outerRadius) * Math.cos(angle) -  0*Math.sin(angle) + this.myCenterX),
+                    (float)((innerRadius + outerRadius) * Math.sin(angle) +  0*Math.cos(angle) + this.myCenterY)
                 );
             }
         }
