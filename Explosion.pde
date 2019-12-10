@@ -43,15 +43,13 @@ public class Explosion extends Floater
     }
 
 
-
-
-        public void startExplode()
-        {
-            this.explodeStartTime = millis();
-        }
-
-        public boolean isExploding()
-        {
-            return this.explodeStartTime != 0;
-        }
+    public void startExplode()
+    {
+        this.explodeStartTime = millis();
     }
+
+    public boolean isExploding()
+    {
+        return this.explodeStartTime != 0;
+    }
+}
