@@ -16,7 +16,7 @@ boolean hyperspace;
 //firing button is down
 boolean fireDown;
 
-boolean gameOver;
+boolean isGameOver;
 
 PImage heartImg;
 
@@ -31,6 +31,8 @@ public void setup()
 {
     //your code here
     size(500, 500);
+
+
     spaceship = new Spaceship(3, new int[] {-8, 16, -8}, new int[] {-8, 0, 8}, color(255), width / 2, height / 2, 0, 0, 0);
     starList = new ArrayList<Star>();
     for (int i = 0; i < 50; i++)
@@ -51,7 +53,7 @@ public void setup()
     leftDown = false;
     fireDown = false;
 
-    gameOver = false;
+    isGameOver = false;
 
     bulletList = new ArrayList<Bullet>();
     //bulletList.add(new Bullet(color(125), 300, 300, 2, 2, 90));
@@ -66,7 +68,7 @@ public void setup()
 }
 public void draw()
 {
-    if (!gameOver)
+    if (!isGameOver)
     {
         background(0);
         //spaceship.setX(mouseX);
@@ -279,7 +281,7 @@ public void draw()
                     {
                         for (int k = 0; k < asteroidVertexesX.length - 1; k++)
                         {
-                            //if distance between asteroid side endpoints less than vertex, collision
+                            //collosion if distance between bullet and asteroid vertexes less than 3
                             //Technically would miss collisions, but because of small asteroid size and its rotation, it gets most of them
                             if (dist((float)(asteroidVertexesX[k] + asteroid.getX()), (float)(asteroidVertexesY[k] + asteroid.getY()), (float)bullet.getX(), (float)bullet.getY()) < 3 ||
                                     dist((float)(asteroidVertexesX[k + 1] + asteroid.getX()), (float)(asteroidVertexesY[k + 1] + asteroid.getY()), (float)bullet.getX(), (float)bullet.getY()) < 3)
@@ -336,6 +338,8 @@ public void draw()
         textAlign(CENTER, CENTER);
         image(heartImg, width - 40, 5, 20, 20);
         text(spaceship.getLives(), width - 15, 13);
+
+        generateRandomConvex(4, 16);
     }
 }
 
@@ -365,7 +369,7 @@ public void keyPressed()
         break;
     case 'r':
     case 'R':
-        if (gameOver)
+        if (isGameOver)
         {
             setup();
             loop();
@@ -408,7 +412,7 @@ public void gameOver()
     fill(255);
     textSize(40);
     textAlign(CENTER, CENTER);
-    gameOver = true;
+    isGameOver = true;
     if (asteroidList.size() > 0)
     {
         text("Game Over", width / 2, height / 2);
@@ -540,11 +544,43 @@ public int[][] generateRandomConvex(int numVertexes, int size)
     }
     //Some extra amount
     int numRandomPoints = numVertexes * 5 + 10;
-    Point[] randomPoints = new Point[numRandomPoints];
+    ArrayList<Point> randomPoints = new ArrayList<Point>();
     //generate random points
+    //x, y are in ranges from -size/2 to size/2, exclusive
     for(int i = 0; i < numRandomPoints; i++)
     {
-        randomPoints[i] = new Point(Math.random() * size / 2, Math.random() * size / 2);
+        randomPoints.add(new Point((Math.random()-0.5) * size, (Math.random()-0.5) * size));
     }
+
+
+    /*for (Point i : randomPoints) {
+    	fill(255, 0, 0);
+    	ellipse((float)(200 + i.getX()), (float)(200 + i.getY()), 5, 5);
+    	noLoop();
+
+    }*/
+
+    //Graham scan
+
+    ArrayList<Point> shapePoints = new ArrayList<Point>();
+    Point minYPoint = randomPoints.get(0);
+    for (Point i : randomPoints) {
+    	if (i.getY() == minYPoint.getY()) {
+    		if (i.getX() < minYPoint.getX()) {
+    			minYPoint = i;
+    		}
+    	}
+    	else if (i.getY() < minYPoint.getY()) {
+    		minYPoint = i;
+    	}
+    }
+
+    //sort by polar angle of point between lowest-Y point and itself
+    //Collections.sort(numRandomPoints, )
+
+    /*fill(0, 255, 0);
+    ellipse((float)(200 + minYPoint.getX()), (float)(200 + minYPoint.getY()), 5, 5);*/
+
+
     return new int[][] {};
 }
