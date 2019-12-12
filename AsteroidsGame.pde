@@ -1,4 +1,4 @@
-// import java.util.Scanner;
+import java.util.*;
 
 //your variable declarations here
 Spaceship spaceship;
@@ -32,6 +32,8 @@ public void setup()
     //your code here
     size(500, 500);
 
+    System.out.println(System.getProperty("java.version"));
+
 
     spaceship = new Spaceship(3, new int[] {-8, 16, -8}, new int[] {-8, 0, 8}, color(255), width / 2, height / 2, 0, 0, 0);
     starList = new ArrayList<Star>();
@@ -64,6 +66,11 @@ public void setup()
 
     //heart image from https://www.needpix.com/photo/1138710/pixel-heart-heart-pixel-symbol-red-valentine-romantic-shape-pixelated
     heartImg = loadImage("pixel-heart.png");
+
+
+    List x = Arrays.asList(8, 3, 2, 4, 5, 6, 78, 14, 23, 54, 32, 12, 93, 15, 30);
+    System.out.println(x);
+    Quicksort.partition(x, 0, x.size()-1);
 
 }
 public void draw()
@@ -576,7 +583,9 @@ public int[][] generateRandomConvex(int numVertexes, int size)
     }
 
     //sort by polar angle of point between lowest-Y point and itself
-    //Collections.sort(numRandomPoints, )
+    /*public int compare(Point a, Point b) {
+    			return (int)(Math.signum(-(a.getX() - minYPoint.getX()) - (a.getY() - minYPoint.getY()) - (-(b.getX() - minYPoint.getX()) / (b.getY() - minYPoint.getY()))));
+    }*/
 
     /*fill(0, 255, 0);
     ellipse((float)(200 + minYPoint.getX()), (float)(200 + minYPoint.getY()), 5, 5);*/
