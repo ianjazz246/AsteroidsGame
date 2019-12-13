@@ -12,25 +12,23 @@ public static class Quicksort
 		while (true) {
 			do {
 				i++;			
-			}
-			//if list[i] < pivot
 			//increments i until it finds an element >= pivot
-			while (list.get(i).compareTo(pivot) < 0);
+			} while (list.get(i).compareTo(pivot) < 0);
+			
 
 			do {
 				j--;
-			}
+			} while (list.get(j).compareTo(pivot) > 0);
 			//if list[j] > pivot
 			//increments j until it finds an element <= pivot
-			while (list.get(j).compareTo(pivot) > 0);
 
 			if (i >= j) {
 				System.out.println(list);
 				return j;
 			}
 			//swap list[i] and list[j]
-			System.out.println(list);
-			System.out.println("Swap");
+			//System.out.println(list);
+			//System.out.println("Swap");
 			list.set(i, list.set(j, list.get(i)));
 			System.out.println(list);
 		}
