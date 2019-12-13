@@ -68,7 +68,10 @@ public void setup()
     heartImg = loadImage("pixel-heart.png");
 
 
-    List x = Arrays.asList(8, 3, 2, 4, 5, 6, 78, 14, 23, 54, 32, 12, 93, 15, 30);
+    List<Integer> x = new ArrayList<Integer>();// Arrays.asList(8, 3, 2, 4, 5, 6, 78, 14, 23, 54, 32, 12, 93, 15, 30);
+    for (int i = 0; i < 20; i++) {
+    	x.add((int)(Math.random() * 101));
+    }
     System.out.println(x);
     Quicksort.partition(x, 0, x.size()-1);
 
